@@ -2,10 +2,6 @@ const express = require('express')
 const app = express()
 const port = 3001
 
-// load order data
-const orders = require('../../data/orders.json')
-
-// define controller
 const controller = {
     getOrders: function(req, res) {
         /**
@@ -25,14 +21,12 @@ const controller = {
     }
 }
 
-// setup routes
 const routes = function(app) {
     app.route('/orders')
        .get(controller.getOrders)
 }
 routes(app)
 
-// start server
 app.listen(port, function() {
    console.log('Server started on port: ' + port)
 })
