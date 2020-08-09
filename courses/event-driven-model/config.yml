@@ -1,0 +1,6 @@
+version: "2"
+virtualmachines:
+- name: event-driven-vm
+  image: instruqt/docker-1903
+  shell: /bin/bash
+  machine_type: n1-standard-2

@@ -1,0 +1,4 @@
+# setup rabbitmq cli
+wget localhost:15672/cli/rabbitmqadmin
+chmod +x rabbitmqadmin
+mv rabbitmqadmin /usr/bin

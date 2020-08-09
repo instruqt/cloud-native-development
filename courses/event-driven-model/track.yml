@@ -1,0 +1,175 @@
+slug: event-driven-model
+id: 35tmi3bik0ya
+type: track
+title: Implement an event-driven microservices architecture
+teaser: Use the event-driven model to implement the microservices architecture
+description: |-
+  ## What will I learn?
+  This track will focus on implementing an event-driven architecture. We'll replace the request/response model with events.
+
+  After completing this course you will:
+  - Learn how to use events to communicate between services
+
+  ## What do I need to know?
+  - Some programming experience is required in order to implement the tracks.
+icon: https://cdn.instruqt.com/img/organizations/cloudnative/cloud-computing-2.svg
+tags:
+- ""
+owner: cloud-native-development
+developers:
+- edudojevic@xebia.com
+private: true
+published: false
+challenges:
+- slug: processing-events-introduction
+  id: v2ajw7ikx9vm
+  type: quiz
+  title: 'Processing of events: an introduction'
+  teaser: 'In this step we''re going to cover some theory about two major event processing
+    techniques: message processing and stream processing.'
+  assignment: Check all statements that are true. Multiple answers are possible.
+  notes:
+  - type: text
+    contents: '# Choosing the right message processing tool'
+  - type: text
+    contents: "So we've decided to build an event-driven architecture. In an event-driven
+      system, events are produced by certain services and consumed by others. There
+      are many ways in which we could propagate events from one service to another.
+      \n\nBut generally speaking, there are two major ways to process our events:
+      \n- By using **message processing**,\n- or **stream processing**.\n\nLet's briefly
+      look at both approaches."
+  - type: text
+    contents: '# Message processing'
+  - type: text
+    contents: |-
+      A typical example of a message processing system is a so called **message queue**. This is the traditional way to deal with events. With message queues, a **producer** sends an event to the **queue**. That event remains on the queue until the **consumer** retrieves it, which immediately also deletes the event from the queue.
+
+      The "message" is directed from one type of producer to one type of consumer. Given a queue, only one type of producer and one **type** of consumer exists.
+
+      This makes scaling easy, as you can have one or more instances of the same type producing events and on the other end similarly one or more instances consuming events.
+  - type: text
+    contents: |-
+      Message queues will give you the powerful advantages of asynchronous communication and decoupled services, while also keeping the architecture simple. Message queues are the way to go if your system meets the following criteria:
+      - Your services must be highly available
+      - You must guarantee that requests are be delivered
+      - Your producer/consumer messaging architecture is known and unlikely to change
+  - type: text
+    contents: '# Stream processing'
+  - type: text
+    contents: Unlike a message queue, with stream processing we're using a stream
+      of events. This differs from a queue since for each stream there is one type
+      of producer, but with possibly multiple types of consumers. We also keep all
+      events stored (and hence don't delete them), so that each type of consumer can
+      process the events by reading the stream seperately.
+  - type: text
+    contents: |-
+      Stream processing is useful in case of a more complex architecture with multiple consumers taking action on a specific event. Also, one consumer can read from multiple streams and perform aggregations over multiple types of events.
+
+      Let's take a look at an example. A temperature sensor continuously emits an event that contains the current temperature, while the heating device and a dashboard consume these events. Each of the consumers can take a different action based on specific event data: the heating device might read events from the stream, and take action when the temperature gets below a certain temperature. The dashboard might process each event to display the current temperature.
+  - type: text
+    contents: '# Overview of advantages and disadvantages'
+  - type: text
+    contents: "## Message processing\nMain advantages:\n- You can **scale easily**
+      by adding more producers of the same type, or consumers of the same type.\n-
+      Your **architecture** is kept relatively **simple**.\n\nMain disadvantage: \n-
+      After an event is read by a consumer, it is **deleted** from the queue. No other
+      consumers can read the same event.\n\n## Stream processing\nMain advantage:\n-
+      One event can be distributed to multiple consumers\n\nMain disadvantage:\n-
+      It is not as easily scalable as message processing."
+  answers:
+  - A message queue has one multiple types of producers and multiple types of consumers.
+  - A message queue is highly scalable since there is only one type of producer and
+    one type of consumer.
+  - One way to implement message processing is by using streams.
+  - With stream processing, each consumer is able to process each event in the stream.
+  - Message processing and stream processing are both ways of implementing of event-driven
+    architectures.
+  solution:
+  - 1
+  - 3
+  - 4
+  difficulty: basic
+  timelimit: 600
+- slug: setup-a-message-queue
+  id: tjypdsj9p0ky
+  type: challenge
+  title: Setup a message queue
+  teaser: In this step we're going to setup a message queue to enable the propagation
+    of events between services.
+  assignment: |-
+    # Setup RabbitMQ Docker container
+    To setup RabbitMQ we're going to run a default RabbitMQ image as a Docker container. You can do this by running the following command in the terminal:
+    ```
+    docker run -d --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+    ```
+
+    The command exposes port `5672` which is used for communication between services and RabbitMQ. Port `15672` is the management web interface where we can configure our queues.
+
+    # Adding an exchange and queues
+    For this step we want to do the following:
+    - Add an exchange `processing` of the type [**direct exchange**](https://www.rabbitmq.com/tutorials/amqp-concepts.html#exchange-direct), with default values for other parameters.
+    - Add the following queues: `orders-placed` and `orders-processed`, with default values for other parameters.
+
+    You can use either the RabbitMQ CLI or the web interface.
+
+    Use the default username `guest` and default password `guest` for authentication.
+
+    *Hint*: You can read more on how to add exchanges and queues in RabbitMQ [here](https://www.rabbitmq.com/management-cli.html).
+  notes:
+  - type: text
+    contents: |-
+      To build an event-driven system with loosely coupled services, we need to propagate events by using a place where producers can send them to and where consumers can retrieve them from. Recall that we can choose here mainly between two types of event processing systems: **message processing** or **stream processing**. Both are possible, but a message queue is simpler and therefore fits our use case perfectly.
+
+      There are a lot of frameworks we can use for implementing a message queue. *RabbitMQ* is one such  framework. It is a popular open-source framework that enables us to deal with message queues easily.
+
+      In this step we're going to setup RabbitMQ as a message queue, so that our services are able to send and receive events independent from each other.
+  tabs:
+  - title: editor
+    type: code
+    hostname: event-driven-vm
+    path: /root/challenge
+  - title: terminal
+    type: terminal
+    hostname: event-driven-vm
+  - title: RabbitMQ management interface
+    type: service
+    hostname: event-driven-vm
+    port: 15672
+  difficulty: basic
+  timelimit: 1800
+- slug: event-driven-orders-service
+  id: 4ql6scj9fibb
+  type: challenge
+  title: Place orders by sending events to message queue
+  teaser: In this step we're going to implement the orders service in an event-riven
+    way through which we can place orders.
+  assignment: You can navigate the folder structure by using your editor, or alternatively,
+    by using the terminal and navigating to `~/challenge`.
+  notes:
+  - type: text
+    contents: |-
+      ## Implement the Orders service using events
+      ...
+  tabs:
+  - title: terminal 1
+    type: terminal
+    hostname: event-driven-vm
+  - title: terminal 2
+    type: terminal
+    hostname: event-driven-vm
+  - title: editor
+    type: code
+    hostname: event-driven-vm
+    path: /root/challenge
+  difficulty: basic
+  timelimit: 3600
+- slug: event-driven-delivery-service
+  id: 8vtpakcym2xf
+  type: challenge
+  title: Process orders by reading events from message queue
+  teaser: In this step we're going to implement the Delivery service in an event-driven
+    way that should process placed orders.
+  assignment: Implement the TODOs.
+  difficulty: basic
+  timelimit: 3600
+checksum: "688198590953393745"

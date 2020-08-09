@@ -1,0 +1,1 @@
+rabbitmqadmin list exchanges | grep " processing " | grep direct || fail-message "Exchange 'processing' not defined!"

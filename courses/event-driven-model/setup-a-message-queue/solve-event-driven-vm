@@ -1,0 +1,3 @@
+# declare exchange and queues
+rabbitmqadmin declare exchange name=processing type=direct
+rabbitmqadmin declare queue name=order-placed durable=true
