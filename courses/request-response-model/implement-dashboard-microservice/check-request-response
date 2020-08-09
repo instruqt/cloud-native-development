@@ -1,0 +1,7 @@
+# check dashboard service port
+curl localhost:3000 || fail-message "The Dashboard service is not running on port 3000!"
+
+# check dashboard service data
+[[ $(curl localhost:3000/dashboard/1) == "John made 2 order(s)." ]] && \
+[[ $(curl localhost:3000/dashboard/2) == "Emma made 1 order(s)." ]] || \
+fail-message "Dashboard service is not returning the data as expected. Expecting for customer with ID 1 the following text: \"John made 2 order(s).\""

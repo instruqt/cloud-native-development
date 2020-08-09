@@ -1,0 +1,6 @@
+version: "2"
+containers:
+- name: request-response
+  image: node:14.6
+  shell: /bin/bash
+  memory: 256

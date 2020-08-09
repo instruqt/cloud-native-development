@@ -1,0 +1,51 @@
+slug: curriculum-introduction
+id: o6xymsvga6wf
+type: track
+title: Curriculum introduction
+teaser: What is this cloud-native curriculum about?
+description: In this track you'll learn what this curriculum is about and what you'll
+  get out of it.
+icon: https://cdn.instruqt.com/img/organizations/cloudnative/time-and-date.svg
+tags:
+- ""
+owner: cloud-native-development
+developers:
+- edudojevic@xebia.com
+private: true
+published: true
+challenges:
+- slug: curriculum-introduction
+  id: 0jzhuykvfqru
+  type: challenge
+  title: Curriculum introduction
+  teaser: Understand the goal of the cloud-native development curriculum
+  assignment: You've read and understood what the curriculum is about. You're ready
+    to go to learn more about cloud-native.
+  notes:
+  - type: text
+    contents: |-
+      This curriculum will teach you **cloud-native patterns** which you can apply at work or on your own project.
+
+      Learning how to apply these patterns is not the main purpose of the curriculum however. The main purpose is to learn **how** to apply them in **the right context**.
+
+      Ultimately this will bring the most **value** to you as a developer, your organisation and the user you’re building the application for. In other words, we want to look at what problems are solved with these solutions and when such a pattern is the right tool for the right job. We don’t want to blindly follow certain patterns without knowing in which cases they are useful, and in which not.
+  - type: text
+    contents: "With learning the specific cloud-native patterns you’ll be able to
+      build your own solutions from scratch. If you’re working on a greenfield project
+      this sounds great. However, there is a good chance you’re dealing with an existing
+      system which is not (or only partly) cloud-native, but which you would like
+      to transition into something more cloud-native. Think of building a system as
+      a microservice architecture from scratch versus transitioning from a monolith
+      into such a system. \n\nThese **transformative patterns** are very useful and
+      are also part of this curriculum."
+  - type: text
+    contents: |-
+      After finishing this training you’ll know:
+      - what cloud-native development is
+      - the cloud-native context and its basic principles
+      - what problem each pattern tries to solve
+      - the advantages and disadvantages of certain patterns
+      - how to exactly apply these patterns with specific cloud offerings
+  difficulty: basic
+  timelimit: 600
+checksum: "989958504782982475"

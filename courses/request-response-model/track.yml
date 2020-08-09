@@ -1,0 +1,175 @@
+slug: request-response-model
+id: powngngmot3r
+type: track
+title: Implement a microservices architecture using the request/response model
+teaser: Implement a traditional request/response model and learn the advantages and
+  disadvantages of this approach
+description: |-
+  ## What will I learn?
+  This course is about implementing an architecture using the **request/response model**.
+
+  After completing this course you will:
+  - Be able to implement the request/response model using multiple microservices
+  - Understand the advantages and disadvantages of the request/response model
+
+  ## What do I need to know?
+  - You need to have some programming experience.
+  - This course uses the [Model-View-Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern. It's useful to have this knowledge, but this is not mandatory.
+  - This course uses a linux-based command-line interface. Supported languages: JavaScript (NodeJS).
+icon: https://cdn.instruqt.com/img/organizations/cloudnative/cloud-computing-2.svg
+tags:
+- ""
+owner: cloud-native-development
+developers:
+- edudojevic@xebia.com
+private: true
+published: true
+challenges:
+- slug: endpoint-customers-service
+  id: itfs4qce1shk
+  type: challenge
+  title: 'Build the building blocks: Implement endpoint of Customers service'
+  teaser: Implement endpoint of Customers service.
+  assignment: |-
+    In your editor you'll see a list of available languages you can choose from. Choose one and then complete the TODO for the Customers service (you can ommit implementing the TODO of the Orders and Dashboard service for now). It's important to also read the readme which has some more details on how to startup the services etc. (`README.md`).
+
+    You can also navigate to the code from `~/challenge`.
+
+    For convenience, you have two terminals at your disposal. One for running each service simultaneously.
+
+    Note: *If you language is not available, choose a language that you're most familiar with. In general JavaScript is recommended as it is a fairly simple language to use.*
+
+    ## Hints
+    - You can check the data you're getting from the endpoint by using `curl` (i.e. `curl localhost:3002/customers/1`)
+
+    ## Check your solution
+    Make sure the Customers and Orders services are implemented as described, and up and running. If you're ready, hit on the Check button below.
+  notes:
+  - type: text
+    contents: |-
+      ## Creating a microservice architecture using the request/response model
+      The request/response model is the traditional way of doing things: we create a (synchronous or asynchronous) request from one service to another.
+
+      In this step we'll warm up by implementing the endpoints for two simple microservices.
+  tabs:
+  - title: editor
+    type: code
+    hostname: request-response
+    path: /root/challenge
+  - title: terminal 1
+    type: terminal
+    hostname: request-response
+  - title: terminal 2
+    type: terminal
+    hostname: request-response
+  difficulty: basic
+  timelimit: 1800
+- slug: endpoint-orders-service
+  id: n07ry9yqrw8c
+  type: challenge
+  title: 'Build the building blocks: Implement endpoint of Orders service'
+  teaser: Implement endpoint of Orders service.
+  assignment: |-
+    Similar to the previous step, implement the endpoint for the orders service.
+
+    ## Hints
+    - You can check the data you're getting from the endpoint by using `curl` (i.e. `curl localhost:3001/orders\?customerId=1`)
+
+    ## Check your solution
+    Before you check your solution
+    - Make sure the Orders service is running on port 3001
+  tabs:
+  - title: editor
+    type: code
+    hostname: request-response
+    path: /root/challenge
+  - title: terminal 1
+    type: terminal
+    hostname: request-response
+  - title: terminal 2
+    type: terminal
+    hostname: request-response
+  difficulty: basic
+  timelimit: 1800
+- slug: implement-dashboard-microservice
+  id: i9m6xwp3xtln
+  type: challenge
+  title: 'Aggregate data: Implement the Dashboard microservice'
+  teaser: Aggregate data by implementing endpoint of Dashboard service.
+  assignment: |-
+    In this step you'll implement the Dashboard service. See the open TODO in dashboard service.
+
+    The challenge is to combine data from the Customers and Orders services. You can do this synchronously or asynchronously.
+
+    ## Checking your solution
+    Before you check your solution:
+    - Make sure the Customers service (port 3002) and Orders service (port 3001) are running in separate tabs, as implemented in the previous step.
+    - Make sure the Dashboard service is running (port 3000)
+  notes:
+  - type: text
+    contents: |-
+      ## Aggregating the data
+      In the previous step you've created two endpoints: for the Customers and Orders service.
+
+      Now we want to aggregate this data to show on our dashboard.
+  tabs:
+  - title: editor
+    type: code
+    hostname: request-response
+    path: /root/challenge
+  - title: terminal 1
+    type: terminal
+    hostname: request-response
+  - title: terminal 2
+    type: terminal
+    hostname: request-response
+  - title: terminal 3
+    type: terminal
+    hostname: request-response
+  difficulty: basic
+  timelimit: 1800
+- slug: advantages-disadvantages-request-response-model
+  id: uxmapucybcqi
+  type: quiz
+  title: Advantages and disavantages of the request/response model
+  teaser: In summary, let's take a look at the advantages and disadvantages of the
+    request/response model.
+  assignment: Select all statements that are true and check your solution.
+  notes:
+  - type: text
+    contents: |-
+      ## Direct querying using the request/response model
+      In the previous steps we've implemented three services: Customers, Orders and Dashboard.
+      For aggregating data we relied on direct querying by using REST calls from Dashboard service to Customers and Orders services.
+  - type: text
+    contents: |-
+      ## Advantages
+      There are clear advantages of this approach. These are the main advantages:
+      - **It's an intuitive approach**. If you know which services to query, you simply make a REST call. Just as you would make a call to a specific method.
+      - **Failures are coupled with requests**: This makes tracking down problems easier, since you know exactly which service is failing. In order to see the full stack-trace of a failure you can setup *distributed tracing* since stack-traces are not passed between microservices.
+      - **Code generation support**. You can generate the model of an API, but also server and client code (i.e. OpenAPI specification)
+  - type: text
+    contents: |-
+      ## Disadvantages
+      As you might have noticed already during implementation of the microservices, there are clear disadvantages of the request/response model we've used so far:
+      - **Tight coupling**. By using the request/response model every microservice specifies which requests to do to other services, and how to handle the responses of the same services. This creates a high coupling, making larger microservice implementations tedious to maintain.
+      - **Larger aggregations of data become more complex**. In the previous step we've created a Dashboard service that directly queries two other services to aggregate data. In larger settings this composition can become very complex. We can abstract away this complexity by using an API gateway.
+      - **All services need to up and working**. This one may sound strange, as you would always want services to be up and running, which you do. But in case of failures, such tightly coupled microservices result in so-called *cascading failures*: one failing service results in all upfollowing dependent services to fail too.
+  - type: text
+    contents: |-
+      This list of disadvantages is not exhaustive, but covers the major points based on our webshop we've built. There are more disadvantages of the request/response model, which might play a role depending on your context. For example *high latency* with multiple dependent services in a chain. Or, requesting more data than you actually need which can become problematic in terms of data usage or security.
+
+      One approach that tackles a lot of these issues is an event-driven system. We'll cover how to build the webshop as an event-driven system in the following course.
+  answers:
+  - Using event-driven microservices is always better than having services using the
+    request/response model.
+  - The request/response model results in tight-coupling between services.
+  - Aggregations of data of multiple services can be solved by using an API gateway.
+  - The request/response model makes sure we're not getting cascading failures in
+    our system.
+  solution:
+  - 1
+  - 2
+  difficulty: basic
+  timelimit: 600
+checksum: "648912857332385353"

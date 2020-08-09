@@ -1,0 +1,8 @@
+/bin/bash
+
+# get todo material
+git clone https://github.com/instruqt/cloud-native-development
+mkdir ~/challenge
+mv cloud-native-development/exercises/1-*/* ~/challenge/
+rm -r ~/challenge/**/solutions
+rm -r cloud-native-development

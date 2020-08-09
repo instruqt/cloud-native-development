@@ -1,0 +1,96 @@
+slug: event-driven-microservices-introduction
+id: i3f1qrxspcst
+type: track
+title: Event-driven microservices introduction
+teaser: Event-driven microservices introduction
+description: |-
+  ## What will I learn?
+  This course will give you an introduction to the **request/response** and **event-driven model**.
+
+  After completing this course you will:
+  - know the principles of event-driven microservices
+  - know the advantages and disadvantages of event-driven microservices
+
+  ## What do I need to know?
+  - You need to have some programming experience in order to grasp the meaning of the theory.
+icon: https://cdn.instruqt.com/img/organizations/cloudnative/cloud-computing-2.svg
+tags:
+- ""
+owner: cloud-native-development
+developers:
+- edudojevic@xebia.com
+private: true
+published: true
+challenges:
+- slug: event-driven-architectures-in-the-cloud-native-context
+  id: tnlfro9xxpwt
+  type: quiz
+  title: Event-driven architectures in the cloud-native context
+  teaser: Learn how event-driven microservices fit into the cloud-native context
+  assignment: Do the quiz to test your knowledge. Select all statements that apply.
+  notes:
+  - type: text
+    contents: '# Request/response vs. event-driven model'
+  - type: text
+    contents: |-
+      When writing an application containing two services that communicate with each other, you could choose to follow the familiar **request/response model**: one service makes a request to another service and the requestor expects a certain response.
+
+      <img src="https://raw.githubusercontent.com/instruqt/cloud-native-development/master/images/request-response-model.svg" alt="Request/response model"/>
+  - type: text
+    contents: The request/response model is a basic *invocation style* that indicates
+      how services communicate with each other. Another way of invocation is by using
+      events, following the **event-driven model**. In a nutshell, an **event-driven
+      system** is a system that focuses on communication between services by using
+      events. Let's take a brief look at the differences of both approaches.
+  - type: text
+    contents: |-
+      The request/response model works very well when executed within a single process. However, in today's world our software is often running in different processes or even on different computers.
+
+      In this distributed setting a service cannot depend on the immediate response from the service receiving a request, and therefore often needs to deal with asynchronicity. Asynchronous calls are perfectly possible in a request/response model, but the drawback is that it also establishes a direct dependence between services.
+  - type: text
+    contents: |-
+      The event-driven system allows us to have asynchronous communication by sending events in an **fire and forget** fashion. How does this work? Services are loosely coupled in the sense that they may listen to events and based on specific events can have a specific outcome. This outcome can be a new event, and/or some specific action such as writing some data to the database.
+
+      <img src="https://raw.githubusercontent.com/instruqt/cloud-native-development/master/images/event-driven-model.svg" alt="Event-driven model"/>
+  - type: text
+    contents: |-
+      The event-driven way of invocation is fundamentally different in that services producing events are completely independent of services consuming them. We can have one or more services producing certain events and one or more services consuming them.
+
+      This higher autonomy gets at the heart of the difference between the request/response and event-driven style of invocation.
+  - type: text
+    contents: '# Benefits and drawbacks of event-driven systems'
+  - type: text
+    contents: Event-driven systems have proven to have many benefits, such as increased
+      developer productivity and more resilient systems. They also have drawbacks
+      however. Let's take a look at a few possible aspects to consider when designing
+      an event-driven system.
+  - type: text
+    contents: |-
+      **Knowledge gap**
+
+      How well are people on your team educated in designing, developing and maintaining an event-driven system? Event-driven systems are fundamentally different from the request/response systems and therefore have big implications on the overall system. If there is a knowledge gap in your situation it is advisable to first look how to bridge this gap and by introducing and maintaining an event-driven way of thinking.
+  - type: text
+    contents: |-
+      **Using a hybrid approach**
+
+      Large and complex systems can make use of both the event-driven and request/response invocation styles, depending on the specific use cases. One approach doesn't necessarily have to exclude the other. We'll look into more detail in both approaches and when it's suitable to combine them later on.
+  - type: text
+    contents: |-
+      **Existing monolith**
+
+      If you have an existing (monolithic) application you could consider migrating to an event-driven driven style of doing things. This needs a well thought-out migration strategy, which can be quite a challenge in some cases. What to do with an existing and running system for example? Luckily, we'll cover some of the major transformative patterns later on (i.e. how to extract (event-driven) services out of a monolith).
+  answers:
+  - The request/response model works very well when used over multiple processes.
+  - In the event-driven model services are loosely coupled.
+  - The event-driven model is used in a *fire and forget* fashion.
+  - When starting with event-driven systems it's important to assess the knowledge
+    of your team.
+  - Request/response invocations result in higher autonomoy for services compared
+    to the event-driven model.
+  solution:
+  - 1
+  - 2
+  - 3
+  difficulty: basic
+  timelimit: 900
+checksum: "3159571455814296752"

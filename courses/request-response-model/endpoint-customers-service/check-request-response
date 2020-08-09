@@ -1,0 +1,11 @@
+# check customers service port
+curl localhost:3002 || fail-message "The Customers service is not running on port 3002!"
+
+# check customers service data
+[[ $(curl localhost:3002/customers/1) == "{\"id\":1,\"name\":\"John\"}" ]] && \
+[[ $(curl localhost:3002/customers/2) == "{\"id\":2,\"name\":\"Emma\"}" ]] || \
+fail-message "Customers service is not returning the JSON data as expected"
+
+# check customers service 404 case
+[[ $(curl localhost:3002/customers/3) == "Customer not found" ]] || \
+fail-message "404 case not implemented for Customers service. Expecting a 404 response with body \"Customer not found\"."

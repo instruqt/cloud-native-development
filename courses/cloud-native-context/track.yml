@@ -1,0 +1,129 @@
+slug: cloud-native-context
+id: sy2kmaxh4f1y
+type: track
+title: The cloud-native context
+teaser: Learn what the cloud-native context is, explore the principles about cloud-native
+  and learn what cloud-native actually is.
+description: In this course we’re going to take a look at what the context of applications
+  is in todays world and the expectations of the user. Then we'll try to distill the
+  most important software characteristics which tell us what is required of our software
+  to meet these expectations. Finally we’re going to define what cloud-native software
+  is.
+icon: https://cdn.instruqt.com/img/organizations/cloudnative/time-and-date.svg
+tags:
+- ""
+owner: cloud-native-development
+developers:
+- edudojevic@xebia.com
+private: true
+published: true
+challenges:
+- slug: cloud-native-context
+  id: qnqpmxgmhbfa
+  type: quiz
+  title: The cloud-native context, cloud-native principles, and definition
+  teaser: Let's take a look at the cloud-native context of applications in todays
+    world.
+  assignment: |-
+    You understand the cloud-native context and the basic principles of cloud-native development. Do the quiz to check your knowledge. Are the following statements true or false? Multiple answers possible.
+
+    When you're done with the quiz, you can proceed to learn the major concepts of cloud-native development. :)
+  notes:
+  - type: text
+    contents: '# Understand the cloud-native context'
+  - type: text
+    contents: |-
+      Let’s take a look at the context of applications in the world of today. At the start we want to take the perspective from the **user** because ultimately it’s the user we’re building the application for. So what does the user want? In todays **highly connected** and **mobile** world we can come up with two main user requirements:
+      - The user expects to be able to use applications at **anytime**, at **any place**, from **any device**.
+      - The user expects **frequent updates** in the form of **new features** or **bug fixes** because the context of the world changes **continuously**.
+  - type: text
+    contents: '# What do these user requirements mean for our software?'
+  - type: text
+    contents: In order for the user to use applications at any time the applications
+      need to be **always up**. Software that’s always up must be **resilient to failures
+      and changes**. Here we actually assume that failures will always happen, as
+      is the case in the real world. This means that we need to think about **redundancy**.
+      That is, multiple copies of our applications are deployed simultaneously. In
+      case one copy fails, we have others to take over.
+  - type: text
+    contents: Software that has frequent changes needs an **agile release model**.
+      That is, we need to be able to release **frequently**. In larger organisations
+      this means that teams can work on different pieces of software and release them
+      **independently**. These different components therefore need to be **loosely
+      coupled**.
+  - type: text
+    contents: In case of any failures caused by, for example bugs that creep in, we
+      want to act quickly in order to minimise the downtime. In order to do this we
+      need to have proper infrastructure that enables us to deploy fixes as soon as
+      they are ready. In addition, we want to be aware of such failures as soon as
+      they occur. To do this we need to cover the aspect of observability, which in
+      turn means that we continuously need to observe the state of our applications.
+  - type: text
+    contents: '# What about scalability of data and requests?'
+  - type: text
+    contents: |-
+      There are additional important factors to consider in case of big amounts of requests and data.
+
+      A lot of requests and big data requires us to incorporate scalability in the design of our software. Considering availability and possible failures the applications need to be redundantly deployed, which is also means that we need to have some form of redundancy for our data too. We surely don’t want our data to be lost after a failure.
+  - type: text
+    contents: A fixed amount of resources reserved to deal with the amount of requests
+      is not flexible. That is, you probably don’t know exactly how much requests
+      exactly will come. In case of lower volumes than expected you are wasting resources
+      (and money), while in times of high demand your application might become unresponsive.
+      To solve this we want to develop software that scales dynamically, dependent
+      on the amount of requests coming in.
+  - type: text
+    contents: As you can see, reasoning about the cloud-native context in todays world
+      has many consequences in what approach we choose when building our software.
+  - type: text
+    contents: '# Learn the 6 cloud-native principles'
+  - type: text
+    contents: |-
+      In a nutshell, these are the 6 principles we would like to follow and build upon:
+      - **Zero downtime**. The software is running 24/7, upgrades are done without downtime.
+      - **Short feedback cycles**. Frequent releases. Fail quickly and fail often. Experiment. Learn and act quickly.
+      - **Design for automation**. CI/CD, automation of creation of infrastructure, scaling up and down, monitoring and automated recovery.
+      - **Go high in the stack**. Prefer managed services over building it yourself. (i.e. PaaS over IaaS)
+      - **Security by design**. Achieve resiliency by taking security into the design.
+      - **Design stateless components**. Whenever possible think mindfully of how you store state. Prefer stateless over stateful components.
+  - type: text
+    contents: When reasoning about our system when designing it, we can use these
+      principles to guide us. Ideally, they should be used at every step in building
+      our cloud-native applications. These principles are the cornerstone of what
+      cloud-native means and they enable us to develop truly powerful applications
+      that are ready for the world of today.
+  - type: text
+    contents: '# So what does cloud-native actually mean?'
+  - type: text
+    contents: |-
+      "Cloud-native" is about **how** applications are created and deployed, **not where**. The "where" can be any public cloud provider, or even a private cloud. From a cloud-native standpoint it really doesn't matter. A multi-cloud solution where we use AWS, GCP and Azure all together, for example, is not excluded.
+
+      Cloud-native primarily tries to take advantage of techniques such as PaaS, multicloud, microservices, agile methodology, containers, CI/CD and DevOps. If you're not familiar with all the concepts, don't worry. For the most part we'll be using these techniques, and where necessary explain just enough so you can grasp certain cloud-native concepts.
+  - type: text
+    contents: |-
+      Let’s conclude with the formal definition of what cloud-native software is. There exist multiple definitions, but one that encompasses the previous characteristics well is the following from The Cloud Native Computing Foundation. Their official [definition](https://github.com/cncf/foundation/blob/master/charter.md) of *cloud-native* is as follows:
+
+      "*Cloud-native technologies empower organizations to build and run scalable applications in modern, dynamic environments such as public, private, and hybrid clouds. Containers, service meshes, microservices, immutable infrastructure, and declarative APIs exemplify this approach.*"
+
+      Furthermore:
+      "*These techniques enable loosely coupled systems that are resilient, manageable, and observable. Combined with robust automation, they allow engineers to make high-impact changes frequently and predictably with minimal toil.*"
+  answers:
+  - The user expects to be able to use applications at any time, at any place, with
+    any device.
+  - Software that needs to be always up means that failures will never happen.
+  - When failures happen, we want to be able to know about them as soon as possible
+    by using monitoring tools.
+  - To deal with spikes in request volume, we need to take scalability into the design
+    of our software.
+  - 'The six cloud-native principles are: 1. zero-downtime, 2. short feedback cycles,
+    3. designing for automation, 4. going high in the cloud stack, 5. security by
+    design, 6. design of stateless components'
+  - The meaning of cloud-native development depends on which cloud provider you use.
+  solution:
+  - 0
+  - 2
+  - 3
+  - 4
+  difficulty: basic
+  timelimit: 600
+checksum: "15751162956077881865"

@@ -1,0 +1,7 @@
+# check orders service port
+curl localhost:3001 || fail-message "The Orders service is not running on port 3001!"
+
+# check orders service data
+[[ $(curl localhost:3001/orders\?customerId=1) == "[{\"id\":1,\"customerId\":1,\"products\":[1,2,3]},{\"id\":3,\"customerId\":1,\"products\":[2]}]" ]] && \
+[[ $(curl localhost:3001/orders\?customerId=3) == "[]" ]] || \
+fail-message "Orders service is not returning the JSON data as expected"
