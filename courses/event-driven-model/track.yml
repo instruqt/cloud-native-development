@@ -8,6 +8,7 @@ description: |-
   This track will focus on implementing an event-driven architecture. We'll replace the request/response model with events.
 
   After completing this course you will:
+  - Learn how to setup a message queue
   - Learn how to use events to communicate between services
 
   ## What do I need to know?
@@ -30,7 +31,7 @@ challenges:
   assignment: Check all statements that are true. Multiple answers are possible.
   notes:
   - type: text
-    contents: '# Choosing the right message processing tool'
+    contents: '# Choosing the right event processing tool'
   - type: text
     contents: "So we've decided to build an event-driven architecture. In an event-driven
       system, events are produced by certain services and consumed by others. There
@@ -69,13 +70,14 @@ challenges:
   - type: text
     contents: '# Overview of advantages and disadvantages'
   - type: text
-    contents: "## Message processing\nMain advantages:\n- You can **scale easily**
-      by adding more producers of the same type, or consumers of the same type.\n-
-      Your **architecture** is kept relatively **simple**.\n\nMain disadvantage: \n-
-      After an event is read by a consumer, it is **deleted** from the queue. No other
-      consumers can read the same event.\n\n## Stream processing\nMain advantage:\n-
-      One event can be distributed to multiple consumers\n\nMain disadvantage:\n-
-      It is not as easily scalable as message processing."
+    contents: |-
+      ## Message processing
+      - **<span style="color:green">⊕</span>** You can **scale easily** by adding more producers of the same type, or consumers of the same type. And your **architecture** is kept relatively **simple**.
+      - **<span style="color:red">⊖</span>** After an event is read by a consumer, it is **deleted** from the queue. No other consumers can read the same event.
+
+      ## Stream processing
+      - **<span style="color:green">⊕</span>** One event can be distributed to **multiple** consumers.
+      - **<span style="color:red">⊖</span>** It is not as easily scalable as message processing.
   answers:
   - A message queue has one multiple types of producers and multiple types of consumers.
   - A message queue is highly scalable since there is only one type of producer and
@@ -98,24 +100,41 @@ challenges:
     of events between services.
   assignment: |-
     # Setup RabbitMQ Docker container
-    To setup RabbitMQ we're going to run a default RabbitMQ image as a Docker container. You can do this by running the following command in the terminal:
+    We're going to run RabbitMQ in its default Docker container image:
     ```
-    docker run -d --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+    docker run -d --name some-rabbit -p 15672:15672 -p 5672:5672 -e RABBITMQ_DEFAULT_USER=instruqt -e RABBITMQ_DEFAULT_PASS=oi34jnflj rabbitmq:3.8.6-management
     ```
 
-    The command exposes port `5672` which is used for communication between services and RabbitMQ. Port `15672` is the management web interface where we can configure our queues.
+    Port `5672` is used for communication between services and RabbitMQ, and port `15672` for the management web interface. For the web interface you can use the defined username and password above.
 
-    # Adding an exchange and queues
-    For this step we want to do the following:
-    - Add an exchange `processing` of the type [**direct exchange**](https://www.rabbitmq.com/tutorials/amqp-concepts.html#exchange-direct), with default values for other parameters.
-    - Add the following queues: `orders-placed` and `orders-processed`, with default values for other parameters.
+    # Setup queues
+    - Add queue `order_placed` (with default values for other parameters).
+    - Add queue `order_processed` (with default values for other parameters).
 
-    You can use either the RabbitMQ CLI or the web interface.
+    *Hint*: You can use either the RabbitMQ CLI or the web interface. You can read more on how to add exchanges and queues in RabbitMQ [here](https://www.rabbitmq.com/management-cli.html).
 
-    Use the default username `guest` and default password `guest` for authentication.
+    # Publish an event to queue
+    So now we can finally publish our first event to the queue! But let's first test that the queue is empty:
+    ```
+    rabbitmqadmin get queue=order_placed
+    ```
+    We can now send a test event by using `curl`. The following command sends an event with payload "order is placed", to the order_placed queue.
+    ```
+    curl -u instruqt:oi34jnflj 'localhost:15672/api/exchanges/%2F/amq.default/publish' -H 'content-type:application/json' --data-binary '{"vhost":"/","name":"amq.default","properties":{"delivery_mode":2,"headers":{}},"routing_key":"order_placed","delivery_mode":"2","payload":"order is placed","headers":{},"props":{},"payload_encoding":"string"}'
+    ```
 
-    *Hint*: You can read more on how to add exchanges and queues in RabbitMQ [here](https://www.rabbitmq.com/management-cli.html).
+    You can check whether the event is on the queue as follows:
+    ```
+    rabbitmqadmin get queue=order_placed
+    ```
+
+    As a final step, send a test event to queue `order_processed` with payload "`order is processed`".
+
+    # Check your solution
+    When you're done, you can check your solution.
   notes:
+  - type: text
+    contents: '# Setup a message queue with RabbitMQ'
   - type: text
     contents: |-
       To build an event-driven system with loosely coupled services, we need to propagate events by using a place where producers can send them to and where consumers can retrieve them from. Recall that we can choose here mainly between two types of event processing systems: **message processing** or **stream processing**. Both are possible, but a message queue is simpler and therefore fits our use case perfectly.
@@ -148,8 +167,10 @@ challenges:
   notes:
   - type: text
     contents: |-
-      ## Implement the Orders service using events
-      ...
+      # Implement the Orders service using events
+      Now that we have setup a message queue, we can send and consume events from these queues.
+
+      In this step we're going to implement the *Orders* service in an **event-driven** way and send events to the message queue.
   tabs:
   - title: terminal 1
     type: terminal
@@ -172,4 +193,4 @@ challenges:
   assignment: Implement the TODOs.
   difficulty: basic
   timelimit: 3600
-checksum: "688198590953393745"
+checksum: "1555742921284848864"

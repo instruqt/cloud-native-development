@@ -1,1 +1,12 @@
-rabbitmqadmin list exchanges | grep " processing " | grep direct || fail-message "Exchange 'processing' not defined!"
+# check if exchange and queues are defined
+#rabbitmqadmin list exchanges | grep " processing " | grep direct || fail-message "Exchange 'processing' not defined!"
+rabbitmqadmin list queues | grep " order_placed " || fail-message "Queue 'order_placed' not defined!"
+rabbitmqadmin list queues | grep " order_processed " || fail-message "Queue 'order_processed' not defined!"
+
+# check if bindings are present
+#rabbitmqadmin list bindings | grep " processing " | grep " processing.order_placed " | grep " order_placed " || fail-message "Binding from exchange 'processing' to queue 'processing.order_placed' not defined!"
+#rabbitmqadmin list bindings | grep " processing " | grep " processing.order_processed " | grep " order_processed " || fail-message "Binding from exchange 'processing' to queue 'processing.order_processed' not defined!"
+
+# check if test events are on queue
+rabbitmqadmin get queue=order_placed | grep " order is placed " || fail-message "There is not test event on queue 'order_placed'! You need to send this test event as requested."
+rabbitmqadmin get queue=order_processed | grep " order is processed " || fail-message "There is not test event on queue 'order_processed'! You need to send this test event as requested."

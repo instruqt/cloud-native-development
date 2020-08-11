@@ -1,0 +1,2 @@
+# setup npm now; to be used in later steps
+apt-get update && apt install npm -y &

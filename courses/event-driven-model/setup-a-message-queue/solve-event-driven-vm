@@ -1,3 +1,12 @@
 # declare exchange and queues
-rabbitmqadmin declare exchange name=processing type=direct
-rabbitmqadmin declare queue name=order-placed durable=true
+#rabbitmqadmin declare exchange name=processing type=direct
+rabbitmqadmin declare queue name=order_placed
+rabbitmqadmin declare queue name=order_processed
+
+#rabbitmqadmin declare binding source=processing destination=processing.order_placed routing_key=order_placed
+#rabbitmqadmin declare binding source=processing destination=processing.order_processed routing_key=order_processed
+
+curl -u instruqt:oi34jnflj 'localhost:15672/api/exchanges/%2F/amq.default/publish' -H 'content-type:application/json' --data-binary '{"vhost":"/","name":"amq.default","properties":{"delivery_mode":2,"headers":{}},"routing_key":"order_placed","delivery_mode":"2","payload":"order is placed","headers":{},"props":{},"payload_encoding":"string"}'
+curl -u instruqt:oi34jnflj 'localhost:15672/api/exchanges/%2F/amq.default/publish' -H 'content-type:application/json' --data-binary '{"vhost":"/","name":"amq.default","properties":{"delivery_mode":2,"headers":{}},"routing_key":"order_processed","delivery_mode":"2","payload":"order is processed","headers":{},"props":{},"payload_encoding":"string"}'
+#curl -u instruqt:oi34jnflj -H "content-type:application/json" -X POST -d'{"properties":{"delivery_mode":2},"routing_key":"order_placed","payload":"order is placed","payload_encoding":"string"}' http://localhost:15672/api/exchanges/%2f/processing/publish
+#curl -u instruqt:oi34jnflj -H "content-type:application/json" -X POST -d'{"properties":{"delivery_mode":2},"routing_key":"order_processed","payload":"order is processed","payload_encoding":"string"}' http://localhost:15672/api/exchanges/%2f/processing/publish
