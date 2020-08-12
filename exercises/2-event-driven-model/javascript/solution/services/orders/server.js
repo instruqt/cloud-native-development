@@ -4,7 +4,6 @@ const app = express()
 app.use(express.json())
 const port = 3001
 
-const defaultExchange = 'amq.default'
 const amqpUrl = 'amqp://localhost'
 
 async function publishToChannel(channel, { routingKey, exchange, data }) {
@@ -30,9 +29,11 @@ const controller = {
         let channel = await connectToRabbitMq()
 
         // publish the data to Rabbit MQ
-        let { customerId, products } = req.body;
-        console.log('publishing data to channel')
-        await publishToChannel(channel, { routingKey: "order_placed", exchangeName: defaultExchange, data: { customerId, products } });
+        let { orderId, customerId, products } = req.body;
+        await publishToChannel(channel, {
+            routingKey: "order_placed",
+            data: { orderId, customerId, products }
+        });
         res.send('ok')
     }
 }
