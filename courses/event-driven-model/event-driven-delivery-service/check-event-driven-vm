@@ -1,0 +1,19 @@
+# check if orders service is running
+curl localhost:3001 || fail-message "The Orders service is not running on port 3001!"
+
+# check if queue is defined (should've been done in the previous exercise)
+rabbitmqadmin list queues | grep " order_placed " || fail-message "Queue 'order_placed' not defined!"
+rabbitmqadmin list queues | grep " order_processed " || fail-message "Queue 'order_processed' not defined!"
+
+# purge queues so we can test from a clean slate
+rabbitmqadmin purge queue name=order_placed
+rabbitmqadmin purge queue name=order_processed
+
+# test chain from orders to deliveries
+curl -X POST -d '{"orderId": 226, "customerId":14, "products": [10,4,8]}' -H "content-type: application/json" localhost:3001/orders
+sleep 1;
+rabbitmqadmin get queue=order_processed | grep '{"orderId":226}' || fail-message "The events are not coming through correctly yet. Expected to see event of form {\"orderId\":226} on queue `order_processed`."
+
+# make sure we purge again if rechecks are done on queue by user
+rabbitmqadmin purge queue name=order_placed
+rabbitmqadmin purge queue name=order_processed

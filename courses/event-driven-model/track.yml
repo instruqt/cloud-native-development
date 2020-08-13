@@ -61,7 +61,7 @@ challenges:
       of events. This differs from a queue since for each stream there is one type
       of producer, but with possibly multiple types of consumers. We also keep all
       events stored (and hence don't delete them), so that each type of consumer can
-      process the events by reading the stream seperately.
+      process the events by reading the stream separately.
   - type: text
     contents: |-
       Stream processing is useful in case of a more complex architecture with multiple consumers taking action on a specific event. Also, one consumer can read from multiple streams and perform aggregations over multiple types of events.
@@ -79,12 +79,12 @@ challenges:
       - **<span style="color:green">⊕</span>** One event can be distributed to **multiple** consumers.
       - **<span style="color:red">⊖</span>** It is not as easily scalable as message processing.
   answers:
-  - A message queue has one multiple types of producers and multiple types of consumers.
+  - A message queue has multiple types of producers and multiple types of consumers.
   - A message queue is highly scalable since there is only one type of producer and
     one type of consumer.
   - One way to implement message processing is by using streams.
   - With stream processing, each consumer is able to process each event in the stream.
-  - Message processing and stream processing are both ways of implementing of event-driven
+  - Message processing and stream processing can both be used when implementing event-driven
     architectures.
   solution:
   - 1
@@ -102,16 +102,16 @@ challenges:
     # Setup RabbitMQ Docker container
     We're going to run RabbitMQ in its default Docker container image:
     ```
-    docker run -d --name some-rabbit -p 15672:15672 -p 5672:5672 -e RABBITMQ_DEFAULT_USER=instruqt -e RABBITMQ_DEFAULT_PASS=oi34jnflj rabbitmq:3.8.6-management
+    docker run -d --name some-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3.8.6-management
     ```
 
-    Port `5672` is used for communication between services and RabbitMQ, and port `15672` for the management web interface. For the web interface you can use the defined username and password above.
+    Port `5672` is used for communication between services and RabbitMQ, and port `15672` for the management web interface. For the web interface you can use the default username `guest` and password `guest`.
 
     # Setup queues
     - Add queue `order_placed` (with default values for other parameters).
     - Add queue `order_processed` (with default values for other parameters).
 
-    *Hint*: You can use either the RabbitMQ CLI or the web interface. You can read more on how to add exchanges and queues in RabbitMQ [here](https://www.rabbitmq.com/management-cli.html).
+    You can use either the RabbitMQ CLI (`rabbitmqadmin`) or the web interface in the tab above. You can read more on how to add exchanges and queues in RabbitMQ [here](https://www.rabbitmq.com/management-cli.html).
 
     # Publish an event to queue
     So now we can finally publish our first event to the queue! But let's first test that the queue is empty:
@@ -120,7 +120,7 @@ challenges:
     ```
     We can now send a test event by using `curl`. The following command sends an event with payload "order is placed", to the order_placed queue.
     ```
-    curl -u instruqt:oi34jnflj 'localhost:15672/api/exchanges/%2F/amq.default/publish' -H 'content-type:application/json' --data-binary '{"vhost":"/","name":"amq.default","properties":{"delivery_mode":2,"headers":{}},"routing_key":"order_placed","delivery_mode":"2","payload":"order is placed","headers":{},"props":{},"payload_encoding":"string"}'
+    curl -u guest:guest 'localhost:15672/api/exchanges/%2F/amq.default/publish' -H 'content-type:application/json' --data-binary '{"vhost":"/","name":"amq.default","properties":{"delivery_mode":2,"headers":{}},"routing_key":"order_placed","delivery_mode":"2","payload":"order is placed","headers":{},"props":{},"payload_encoding":"string"}'
     ```
 
     You can check whether the event is on the queue as follows:
@@ -143,10 +143,6 @@ challenges:
 
       In this step we're going to setup RabbitMQ as a message queue, so that our services are able to send and receive events independent from each other.
   tabs:
-  - title: editor
-    type: code
-    hostname: event-driven-vm
-    path: /root/challenge
   - title: terminal
     type: terminal
     hostname: event-driven-vm
@@ -162,8 +158,26 @@ challenges:
   title: Place orders by sending events to message queue
   teaser: In this step we're going to implement the orders service in an event-riven
     way through which we can place orders.
-  assignment: You can navigate the folder structure by using your editor, or alternatively,
-    by using the terminal and navigating to `~/challenge`.
+  assignment: "## Choose your language\nYou can navigate the folder structure by using
+    your editor, or alternatively, by using the terminal and navigating from `~/challenge`.
+    Choose your preferred language. If your preferred language is not present in the
+    list, as a default it's advisable to use JavaScript since this is a relatively
+    simple language to work with.\n\nWhen you've chosen your language in the project
+    structure, read the file `README.md` first to get more context.\n\n## TODO\n-
+    Implement the TODO in the Orders service. This is the method that places an order
+    to the message queue.\n\n## Test for placing an order\nWhen finished implementing
+    the method we want to test it by sending the following payload to the orders endpoint:
+    `{\"orderId\":1, \"customerId\":1, products:[1,2,3]}`. As you can see, this specific
+    customer has placed an order with three products.\n\nWe can do this by using `curl`
+    on the `/orders` endpoint, as follows:\n```\ncurl -X POST -d '{\"orderId\":1,
+    \"customerId\":1, \"products\":[1,2,3]}' -H 'content-type: application/json' localhost:3001/orders\n```\n\nNow
+    let's take a look at whether the message is properly sent to the right queue:\n```\nrabbitmqadmin
+    get queue=order_placed                                                                          \n```\n\nThe
+    result of the above command should show the following string for the payload:
+    `{\"orderId\":1,\"customerId\":1,\"products\":[1,2,3]}`.\n\n## Summary\nYou have
+    implemented the endpoint for placing orders in the Orders service! Congratulations!
+    This enables us to place orders. The next step is to processes these orders asynchronously.
+    This is what the Deliveries service will do."
   notes:
   - type: text
     contents: |-
@@ -182,6 +196,10 @@ challenges:
     type: code
     hostname: event-driven-vm
     path: /root/challenge
+  - title: RabbitMQ web interface
+    type: service
+    hostname: event-driven-vm
+    port: 15672
   difficulty: basic
   timelimit: 3600
 - slug: event-driven-delivery-service
@@ -190,7 +208,135 @@ challenges:
   title: Process orders by reading events from message queue
   teaser: In this step we're going to implement the Delivery service in an event-driven
     way that should process placed orders.
-  assignment: Implement the TODOs.
+  assignment: |-
+    ## Choose your language
+    You can navigate the folder structure by using your editor, or alternatively, by using the terminal and navigating from `~/challenge`. Choose your preferred language. If your preferred language is not present in the list, as a default it's advisable to use JavaScript since this is a relatively simple language to work with.
+
+    ## What to do?
+    - Make sure the Orders service is running on port 3001 in one terminal.
+    - Implement the TODOs in the Deliveries service.
+    - Run the Deliveries service.
+
+    ## Testing the whole chain
+    Let's test the whole chain by sending the following payload to the orders endpoint: `{"orderId":1, "customerId":1, "products":[1,2,3]}`.
+
+    We can do this by using `curl` on the `/orders` endpoint, as follows:
+    ```
+    curl -X POST -d '{"orderId":1, "customerId":1, "products":[1,2,3]}' -H 'content-type: application/json' localhost:3001/orders
+    ```
+
+    # What is happening?
+    The Orders service gets a hit on the `/orders` endpoint and then sends an event to the `order_placed` message queue. The Delivery service takes this event from the `order_placed` queue, processes it, and then produces an event itself by sending it to the message queue `order_processed`.
+
+    # Test end result
+    The end result should be that the `order_placed` queue is empty, and `order_processed` contains one event (`rabbitmqadmin get queue=...`). The result should then look like this:
+    ```
+    +-----------------+----------+---------------+---------------+---------------+------------------+-------------+
+    |   routing_key   | exchange | message_count |    payload    | payload_bytes | payload_encoding | redelivered |
+    +-----------------+----------+---------------+---------------+---------------+------------------+-------------+
+    | order_processed |          | 1             | {"orderId":1} | 13            | string           | False       |
+    +-----------------+----------+---------------+---------------+---------------+------------------+-------------+
+    ```
+
+    ## Summary
+    You have implemented the Delivery service! Congratulations! This now enables us to processes orders and deliver them to our customers. This is a great day since now we can finally start selling our products. :)
+  notes:
+  - type: text
+    contents: |-
+      # Implement the Delivery service using events
+      Previously, we have setup the Orders service so we can place orders. When placing an order an event is sent to the message queue.
+
+      Now we want to process these orders with the *Delivery service*. The Delivery service will for one part act as a consumer, taking in events from the queue produced by the Orders service. And for the other part produce events, indicating that it has finished processing an event.
+
+      Let's dive in.
+  tabs:
+  - title: editor
+    type: code
+    hostname: event-driven-vm
+    path: /root/challenge
+  - title: terminal 1
+    type: terminal
+    hostname: event-driven-vm
+  - title: terminal 2
+    type: terminal
+    hostname: event-driven-vm
+  - title: terminal 3
+    type: terminal
+    hostname: event-driven-vm
+  - title: RabbitMQ web interface
+    type: service
+    hostname: event-driven-vm
+    port: 15672
   difficulty: basic
   timelimit: 3600
-checksum: "1555742921284848864"
+- slug: event-driven-model-summary
+  id: gjlyjc4yhucw
+  type: quiz
+  title: Summary
+  teaser: Let's conclude with a summary of what we have learned in this course.
+  assignment: Check all statements that are true. Multiple answers apply.
+  notes:
+  - type: text
+    contents: '# Summary'
+  - type: text
+    contents: |-
+      Let's summarize what we have covered in this course:
+      - We have implemented microservices that communicate **asynchronously** by using events. This avoids bottlenecks caused by sychronous communication such as the request/response model.
+      - The services are loosely **coupled**. The services don't need to know about each others existence. They therefore can be developed, tested, deployed and scaled independently.
+      - The services are **easy to scale**. Since we have been using a **message queue**, we can scale up our application by just running multiple instances of a service on both ends of a queue.
+  - type: text
+    contents: We have demonstrated how powerful event-driven systems are by focusing
+      on sending and receiving events. Although this is the core principle of an event-driven
+      system, this however does not tell the whole story of event-driven architectures.
+      Let's take a look at few other things you might want to consider when designing
+      an event-driven system.
+  - type: text
+    contents: |-
+      # Important considerations
+      The following are some of the major decisions you might want to consider for an event-driven architecture.
+
+      Don't worry if you don't understand them fully. We'll take a look at these aspects in the upfollowing courses.
+  - type: text
+    contents: |-
+      - **Event sourcing**: Implementing a combination of loosely coupled services, distinct data stores and atomic transactions can become difficult. Event sourcing makes sure that changes are not performed directly on data, but rather the state change is saved as an event. State is then computed from a series of events.
+      - **CQRS**: By using event sourcing, we often get the issue of slow and complex queries. CQRS deals with this problem by separating models for insertion and deletion.
+      - **Dealing with change**: The event structure is probably going to change over time. To deal with this we need to think about service/event discovery, how to change events without breaking other services etc.
+      - **Using managed services**: Take for example the message queue as used in this course that is hosted locally. You could choose to maintain this yourself, but in most cases it is advisable to take a look at managed services instead.
+  - type: text
+    contents: |-
+      # Antipatterns
+      Finally, let's also take a brief look at some antipatterns, so you know what **not** to do. :)
+  - type: text
+    contents: |-
+      - **Too many and complex events**: Be mindful when creating events. Add too many, and you'll probably end up with unnessesary complexity between services. This complexity also increases cognitive load for the developers, it makes testing and deployment more difficult, and in some cases can cause event congestion on queues. Not every method needs to generate an event. Keep things simple.
+      - **Generic events**: You want others to be able to understand what your events are about. So don't use generic events, either in name or purpose. Make them specific and think about naming properly, to avoid confusion. In more complex systems you can consider using [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html) as an approach to identify domains, split services and events, and name them accordingly. We'll look into events and DDD this in a later course.
+  - type: text
+    contents: |-
+      - **Depending on guaranteed order, delivery, or side effects**
+      When building event-driven systems you want to avoid assuming a certain order in events, or even the assumption that there will be no duplicates. It's also possible that events are not delivered at all, so you have to have mechanisms to deal with these problems. In addition, avoid having services that produce **side effects**, as this makes replaying of events more difficult.
+      - **Premature optimization**: Create your event-driven architecture in an agile way. Start of small and grow it over time, while focusing on the most important aspects at one point in time. Avoid prematurely overoptimizing for the future.
+  - type: text
+    contents: '- **Building an event-driven architecture because others do it**. Think
+      also about whether an event-driven system is a good option at all! For smaller
+      teams an event-driven architecture can be overkill, and will probably slow development
+      down. Consider also how much knowledge a team has in a team, and if you go for
+      it include this learning curve into your business case.'
+  - type: text
+    contents: |-
+      # Recommended reading material
+      - ["*Focusing on Events*"](https://www.martinfowler.com/eaaDev/EventNarrative.html), Martin Fowler blog.
+      - ["*What do you mean by 'Event-Driven'?*"](https://martinfowler.com/articles/201701-event-driven.html)
+      - Book: ["*Building Event-Driven Microservices*"](https://learning.oreilly.com/library/view/building-event-driven-microservices/9781492057888/), by Adam Bellemare.
+  answers:
+  - If you have a small team, you should always use event-driven architectures.
+  - Each event-driven microservice needs to know which other microservices exist.
+  - When using a message queue, we can scale easily on both ends of a queue.
+  - Don't use generic events, but create ones that are specific in name and purpose.
+  - Don't make assumptions on the order of events and that there will be no duplicates.
+  solution:
+  - 2
+  - 3
+  - 4
+  difficulty: basic
+  timelimit: 900
+checksum: "18333900575484415568"

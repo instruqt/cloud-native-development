@@ -1,5 +1,5 @@
 git clone https://github.com/instruqt/cloud-native-development
 mkdir ~/challenge
-mv cloud-native-development/exercises/1-*/* ~/challenge/
-rm -r ~/challenge/**/solutions
+mv cloud-native-development/exercises/2-*/* ~/challenge/
+rm -r ~/challenge/**/solution
 rm -r cloud-native-development
