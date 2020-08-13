@@ -1,0 +1,14 @@
+{
+  "name": "deliveries",
+  "version": "1.0.0",
+  "description": "Deliveries service",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Edin Dudojević",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "0.6.0"
+  }
+}
